@@ -13,8 +13,6 @@ export const SPOTIFY_TOKEN = 'spotifyToken'
 export const USER_INFO = 'userInfo'
 export const IS_CURRENTLY_PARTY_OWNER = 'isPartyOwner'
 
-export const googleClientId = '366589988548-reag2f35a49fa2cavc4lnl5k1p8n1brd.apps.googleusercontent.com'
-
 export async function getUserInfo(): Promise<CoflnetSongVoterModelsUserInfo> {
     let info = localStorage.getItem(USER_INFO)
     if (info) {

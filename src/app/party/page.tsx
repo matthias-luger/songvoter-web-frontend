@@ -7,27 +7,39 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useEffect, useState } from 'react'
-import { getPartyController } from '@/utils/ApiUtils'
-import { CoflnetSongVoterModelsParty } from '../../../generated'
+import { getListController, getPartyController } from '@/utils/ApiUtils'
+import { CoflnetSongVoterModelsParty, CoflnetSongVoterModelsPartyPlaylistEntry, CoflnetSongVoterModelsPlayList } from '../../../generated'
 import Header from '@/components/Header'
-import { Card, CardActions, CardContent, CardMedia, Grid } from '@mui/material'
-import Footer from '@/components/Footer'
-
-let songs = ['Song1', 'Song2', 'Song3']
+import { Card, CardActions, CardContent, CardMedia, Grid, IconButton } from '@mui/material'
+import LikeIcon from '@mui/icons-material/ThumbUp'
+import DislikeIcon from '@mui/icons-material/ThumbDown'
+import GoogleLogin from '@/components/GoogleLogin'
 
 export default function Page() {
     let [party, setParty] = useState<CoflnetSongVoterModelsParty>()
+    let [playlist, setPlaylist] = useState<CoflnetSongVoterModelsPartyPlaylistEntry[]>([])
     let [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        loadParty()
+        init()
     }, [])
+
+    async function init() {
+        await Promise.all([loadParty(), loadSongs()]).then(() => {
+            setIsLoading(false)
+        })
+    }
 
     async function loadParty() {
         let partyController = await getPartyController()
         let party = await partyController.partyGet()
         setParty(party)
-        setIsLoading(false)
+    }
+
+    async function loadSongs() {
+        let partyController = await getPartyController()
+        let playlist = await partyController.partyPlaylistGet()
+        setPlaylist(playlist)
     }
 
     return (
@@ -41,6 +53,7 @@ export default function Page() {
                         pb: 6
                     }}
                 >
+                    <GoogleLogin />
                     <Container maxWidth="sm">
                         <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
                             Party Overview
@@ -57,30 +70,42 @@ export default function Page() {
                     <Container sx={{ py: 8 }} maxWidth="md">
                         {/* End hero unit */}
                         <Grid container spacing={4}>
-                            {songs.map(song => (
-                                <Grid item key={song} xs={12} sm={6} md={4}>
-                                    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                                        <CardMedia
-                                            component="div"
-                                            sx={{
-                                                // 16:9
-                                                pt: '56.25%'
-                                            }}
-                                            image="https://source.unsplash.com/random?wallpapers"
-                                        />
-                                        <CardContent sx={{ flexGrow: 1 }}>
-                                            <Typography gutterBottom variant="h5" component="h2">
-                                                {song}
-                                            </Typography>
-                                            <Typography>This is a media card. You can use this section to describe the content.</Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button size="small">View</Button>
-                                            <Button size="small">Edit</Button>
-                                        </CardActions>
-                                    </Card>
-                                </Grid>
-                            ))}
+                            {playlist.map(entry => {
+                                let x = 1
+                                let song = entry.song?.occurences![0]
+                                if (!song) {
+                                    return null
+                                }
+                                return (
+                                    <Grid item key={entry.song?.id} xs={12} sm={6} md={4}>
+                                        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                            <CardMedia
+                                                component="div"
+                                                sx={{
+                                                    // 16:9
+                                                    pt: '56.25%'
+                                                }}
+                                                image={song.thumbnail || ''}
+                                            />
+                                            <CardContent sx={{ flexGrow: 1 }}>
+                                                <Typography gutterBottom variant="h5" component="h2">
+                                                    {song.title}
+                                                </Typography>
+                                                <Typography>{song.artist}</Typography>
+                                                <Typography>{song.platform}</Typography>
+                                            </CardContent>
+                                            <CardActions>
+                                                <IconButton size="small">
+                                                    <LikeIcon />
+                                                </IconButton>
+                                                <IconButton size="small">
+                                                    <DislikeIcon />
+                                                </IconButton>
+                                            </CardActions>
+                                        </Card>
+                                    </Grid>
+                                )
+                            })}
                         </Grid>
                     </Container>
                 </Box>
