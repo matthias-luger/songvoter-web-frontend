@@ -41,11 +41,11 @@ async function getConfiguration(): Promise<Configuration> {
     })
     let googleToken = localStorage.getItem(GOOGLE_TOKEN)
     if (!googleToken) {
-        let authController = new AuthApiControllerImplApi()
+        let authController = new AuthApiControllerImplApi(config)
         googleToken = (await authController.authAnonymousPost()).token || null
-    } else {
-        config.headers!.Authorization = `Bearer ${googleToken}`
+        localStorage.setItem(GOOGLE_TOKEN, googleToken!)
     }
+    config.headers!.Authorization = `Bearer ${googleToken}`
     return config
 }
 
