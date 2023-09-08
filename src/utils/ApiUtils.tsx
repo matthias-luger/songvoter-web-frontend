@@ -40,9 +40,10 @@ async function getConfiguration(): Promise<Configuration> {
         }
     })
     let googleToken = localStorage.getItem(GOOGLE_TOKEN)
-    if (googleToken) {
-        // TODO: Handle Google Token refresh
-
+    if (!googleToken) {
+        let authController = new AuthApiControllerImplApi()
+        googleToken = (await authController.authAnonymousPost()).token || null
+    } else {
         config.headers!.Authorization = `Bearer ${googleToken}`
     }
     return config

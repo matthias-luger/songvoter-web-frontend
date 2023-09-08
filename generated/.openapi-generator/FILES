@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AuthApiControllerImplApi.ts
 apis/ListApiControllerImplApi.ts
 apis/PartyApi.ts
