@@ -229,14 +229,12 @@ export default function Page() {
                     sx={modalStyle}
                     aria-labelledby="Add Song"
                 >
-                    <Box>
-                        <Container>
-                            <Typography variant="h4" component="h2">
-                                Add Songs
-                            </Typography>
-                            <AddSong onAfterSongAdded={addSongToParty} />
-                        </Container>
-                    </Box>
+                    <div>
+                        <Typography variant="h4" component="h2">
+                            Add Songs
+                        </Typography>
+                        <AddSong onAfterSongAdded={addSongToParty} />
+                    </div>
                 </Modal>
             </main>
         </>
