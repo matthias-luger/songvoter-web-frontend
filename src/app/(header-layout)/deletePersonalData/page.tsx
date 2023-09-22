@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useState } from 'react'
 import GoogleLogin from '@/components/GoogleLogin'
-import { TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import { CodeResponse } from '@react-oauth/google'
 
 export default function Page() {
@@ -50,12 +50,15 @@ export default function Page() {
                         {!isLoggedIn ? (
                             <GoogleLogin />
                         ) : (
-                            <TextField
-                                multiline
-                                onChange={e => {
-                                    setText(e.target.value)
-                                }}
-                            />
+                            <Box>
+                                <TextField
+                                    multiline
+                                    onChange={e => {
+                                        setText(e.target.value)
+                                    }}
+                                />
+                                <Button onClick={onFeedbackSend} />
+                            </Box>
                         )}
                     </Container>
                 </Box>
