@@ -9,7 +9,14 @@ export default function GoogleLogin() {
     })
 
     async function handleGoogleSuccessResponse(response: Omit<CodeResponse, 'error' | 'error_description' | 'error_uri'>) {
-        console.log(response)
+        let authController = await getAuthController()
+        let token = await authController.apiAuthGoogleCodePost({
+            coflnetSongVoterControllersAuthApiControllerImplAuthCode: {
+                code: response.code,
+                redirectUri: window.location.href
+            }
+        })
+        console.log(token.token)
     }
 
     return <Button onClick={() => login()}>Sign in with Google 🚀 </Button>

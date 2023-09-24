@@ -4,7 +4,7 @@ import {
     Configuration,
     ListApiControllerImplApi,
     PartyApi,
-    SongApiControllerImplApi,
+    SongApiApi,
     UserApi
 } from '../../generated'
 
@@ -27,7 +27,7 @@ export async function getUserInfo(): Promise<CoflnetSongVoterModelsUserInfo> {
     }
 
     let userController = await getUserController()
-    let result = await userController.userInfoGet()
+    let result = await userController.apiUserInfoGet()
     localStorage.setItem(USER_INFO, JSON.stringify(result))
     return result
 }
@@ -42,7 +42,7 @@ async function getConfiguration(): Promise<Configuration> {
     let googleToken = localStorage.getItem(GOOGLE_TOKEN)
     if (!googleToken) {
         let authController = new AuthApiControllerImplApi(config)
-        googleToken = (await authController.authAnonymousPost()).token || null
+        googleToken = (await authController.apiAuthAnonymousPost()).token || null
         localStorage.setItem(GOOGLE_TOKEN, googleToken!)
     }
     config.headers!.Authorization = `Bearer ${googleToken}`
@@ -51,6 +51,6 @@ async function getConfiguration(): Promise<Configuration> {
 
 export let getAuthController = async () => new AuthApiControllerImplApi(await getConfiguration())
 export let getPartyController = async () => new PartyApi(await getConfiguration())
-export let getSongController = async () => new SongApiControllerImplApi(await getConfiguration())
+export let getSongController = async () => new SongApiApi(await getConfiguration())
 export let getListController = async () => new ListApiControllerImplApi(await getConfiguration())
 export let getUserController = async () => new UserApi(await getConfiguration())

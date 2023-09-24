@@ -53,9 +53,9 @@ export default function AddSong(props: Props) {
             }, 3000)
 
             let controller = await getSongController()
-            let results = await controller.songsSearchGet({
+            let results = await controller.apiSongsSearchGet({
                 term: searchText,
-                platforms: 'spotify'
+                platforms: ['spotify']
             })
             if (searchText !== searchTextRef.current) {
                 return
@@ -79,7 +79,7 @@ export default function AddSong(props: Props) {
         setResults(songs)
         if (props.playlistId) {
             let listController = await getListController()
-            await listController.listsListIdSongsPost({
+            await listController.apiListsListIdSongsPost({
                 listId: props.playlistId,
                 coflnetSongVoterModelsSongId: {
                     id: song.id

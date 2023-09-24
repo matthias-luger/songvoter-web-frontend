@@ -28,19 +28,23 @@ import {
     CoflnetSongVoterModelsAuthTokenToJSON,
 } from '../models/index';
 
-export interface AuthAnonymousPostRequest {
+export interface ApiAuthAnonymousPostRequest {
     nonce?: string;
 }
 
-export interface AuthGooglePostRequest {
-    coflnetSongVoterModelsAuthRefreshToken?: CoflnetSongVoterModelsAuthRefreshToken;
-}
-
-export interface AuthSpotifyCodePostRequest {
+export interface ApiAuthGoogleCodePostRequest {
     coflnetSongVoterControllersAuthApiControllerImplAuthCode?: CoflnetSongVoterControllersAuthApiControllerImplAuthCode;
 }
 
-export interface AuthTestPostRequest {
+export interface ApiAuthGooglePostRequest {
+    coflnetSongVoterModelsAuthRefreshToken?: CoflnetSongVoterModelsAuthRefreshToken;
+}
+
+export interface ApiAuthSpotifyCodePostRequest {
+    coflnetSongVoterControllersAuthApiControllerImplAuthCode?: CoflnetSongVoterControllersAuthApiControllerImplAuthCode;
+}
+
+export interface ApiAuthTestPostRequest {
     coflnetSongVoterModelsAuthToken?: CoflnetSongVoterModelsAuthToken;
 }
 
@@ -60,7 +64,7 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
     /**
      * Sign in with anonymous user
      */
-    async authAnonymousPostRaw(requestParameters: AuthAnonymousPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
+    async apiAuthAnonymousPostRaw(requestParameters: ApiAuthAnonymousPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
         const queryParameters: any = {};
 
         if (requestParameters.nonce !== undefined) {
@@ -70,7 +74,7 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/auth/anonymous`,
+            path: `/api/auth/anonymous`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -82,15 +86,15 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
     /**
      * Sign in with anonymous user
      */
-    async authAnonymousPost(requestParameters: AuthAnonymousPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
-        const response = await this.authAnonymousPostRaw(requestParameters, initOverrides);
+    async apiAuthAnonymousPost(requestParameters: ApiAuthAnonymousPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
+        const response = await this.apiAuthAnonymousPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Stores google auth token server side
+     * Authcode oauth2 flow for google
      */
-    async authGooglePostRaw(requestParameters: AuthGooglePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
+    async apiAuthGoogleCodePostRaw(requestParameters: ApiAuthGoogleCodePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -98,7 +102,36 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/auth/google`,
+            path: `/api/auth/google/code`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CoflnetSongVoterControllersAuthApiControllerImplAuthCodeToJSON(requestParameters.coflnetSongVoterControllersAuthApiControllerImplAuthCode),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CoflnetSongVoterModelsAuthTokenFromJSON(jsonValue));
+    }
+
+    /**
+     * Authcode oauth2 flow for google
+     */
+    async apiAuthGoogleCodePost(requestParameters: ApiAuthGoogleCodePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
+        const response = await this.apiAuthGoogleCodePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Stores google auth token server side
+     */
+    async apiAuthGooglePostRaw(requestParameters: ApiAuthGooglePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/auth/google`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -111,14 +144,14 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
     /**
      * Stores google auth token server side
      */
-    async authGooglePost(requestParameters: AuthGooglePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
-        const response = await this.authGooglePostRaw(requestParameters, initOverrides);
+    async apiAuthGooglePost(requestParameters: ApiAuthGooglePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
+        const response = await this.apiAuthGooglePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async authSpotifyCodePostRaw(requestParameters: AuthSpotifyCodePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
+    async apiAuthSpotifyCodePostRaw(requestParameters: ApiAuthSpotifyCodePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsAuthToken>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -126,7 +159,7 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/auth/spotify/code`,
+            path: `/api/auth/spotify/code`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -138,14 +171,14 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
 
     /**
      */
-    async authSpotifyCodePost(requestParameters: AuthSpotifyCodePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
-        const response = await this.authSpotifyCodePostRaw(requestParameters, initOverrides);
+    async apiAuthSpotifyCodePost(requestParameters: ApiAuthSpotifyCodePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsAuthToken> {
+        const response = await this.apiAuthSpotifyCodePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async authTestPostRaw(requestParameters: AuthTestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiAuthTestPostRaw(requestParameters: ApiAuthTestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -153,7 +186,7 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/auth/test`,
+            path: `/api/auth/test`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -165,8 +198,8 @@ export class AuthApiControllerImplApi extends runtime.BaseAPI {
 
     /**
      */
-    async authTestPost(requestParameters: AuthTestPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.authTestPostRaw(requestParameters, initOverrides);
+    async apiAuthTestPost(requestParameters: ApiAuthTestPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiAuthTestPostRaw(requestParameters, initOverrides);
     }
 
     /**
