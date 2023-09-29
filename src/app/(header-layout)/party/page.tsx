@@ -36,14 +36,14 @@ export default function Page() {
 
     async function loadParty() {
         let partyController = await getPartyController()
-        let party = await partyController.partyGet()
+        let party = await partyController.apiPartyGet()
         console.log(party)
         setParty(party)
     }
 
     async function loadSongs() {
         let partyController = await getPartyController()
-        let playlist = await partyController.partyPlaylistGet()
+        let playlist = await partyController.apiPartyPlaylistGet()
         setPlaylist(playlist)
     }
 
@@ -53,7 +53,7 @@ export default function Page() {
             return
         }
         let controller = await getPartyController()
-        await controller.partyUpvoteSongIdPost({
+        await controller.apiPartyUpvoteSongIdPost({
             songId: playlistEntry.song?.id!
         })
         let newPlaylist = [...playlist]
@@ -76,7 +76,7 @@ export default function Page() {
             return
         }
         let controller = await getPartyController()
-        await controller.partyDownvoteSongIdPost({
+        await controller.apiPartyDownvoteSongIdPost({
             songId: playlistEntry.song?.id!
         })
         let newPlaylist = [...playlist]
@@ -95,7 +95,7 @@ export default function Page() {
 
     async function removeVote(playlistEntry: CoflnetSongVoterModelsPartyPlaylistEntry) {
         let controller = await getPartyController()
-        await controller.partyRemoveVoteSongIdPost({
+        await controller.apiPartyRemoveVoteSongIdPost({
             songId: playlistEntry.song?.id!
         })
         let newPlaylist = [...playlist]
@@ -116,7 +116,7 @@ export default function Page() {
 
     async function addSongToParty(song: CoflnetSongVoterModelsSong) {
         let controller = await getPartyController()
-        await controller.partyUpvoteSongIdPost({
+        await controller.apiPartyUpvoteSongIdPost({
             songId: song.id!
         })
         setPlaylist([])

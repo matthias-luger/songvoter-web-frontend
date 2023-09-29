@@ -23,7 +23,7 @@ export default function Page({ params }: any) {
     async function joinParty() {
         try {
             let partyController = await getPartyController()
-            await partyController.partyInviteIdJoinPost({
+            await partyController.apiPartyInviteIdJoinPost({
                 inviteId: params.inviteId
             })
             router.push('/party')
