@@ -1,7 +1,12 @@
-import { getAuthController } from '@/utils/ApiUtils'
+import { GOOGLE_TOKEN, getAuthController } from '@/utils/ApiUtils'
 import { Button } from '@mui/material'
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google'
-export default function GoogleLogin() {
+
+interface Props {
+    onAfterLogin(token: string): void
+}
+
+export default function GoogleLogin(props: Props) {
     const login = useGoogleLogin({
         onSuccess: handleGoogleSuccessResponse,
         flow: 'auth-code',
@@ -16,7 +21,8 @@ export default function GoogleLogin() {
                 redirectUri: window.location.href
             }
         })
-        console.log(token.token)
+        localStorage.setItem(GOOGLE_TOKEN, token.token!)
+        props.onAfterLogin(token.token!)
     }
 
     return <Button onClick={() => login()}>Sign in with Google 🚀 </Button>

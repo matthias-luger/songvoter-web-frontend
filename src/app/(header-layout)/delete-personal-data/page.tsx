@@ -6,30 +6,35 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useState } from 'react'
 import GoogleLogin from '@/components/GoogleLogin'
-import { Button, TextField } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material'
 import { CodeResponse } from '@react-oauth/google'
+import { getUserController } from '@/utils/ApiUtils'
 
 export default function Page() {
     let [isLoggedIn, setIsLoggedIn] = useState(false)
-    let [userId, setUserId] = useState(null)
+    let [showConfirmDialog, setShowConfirmDialog] = useState(false)
     let [text, setText] = useState('')
 
-    function onFeedbackSend() {
-        fetch('https://feedback.coflnet.com/api/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                Context: 'SongVoter',
-                User: '',
-                Feedback: JSON.stringify(text),
-                FeedbackName: 'deletePersonalData'
+    async function onDeletionConfirm() {
+        if (text) {
+            fetch('https://feedback.coflnet.com/api/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    Context: 'SongVoter',
+                    User: '',
+                    Feedback: JSON.stringify(text),
+                    FeedbackName: 'deletePersonalData'
+                })
             })
-        })
+        }
+        let userController = await getUserController()
+        userController.apiUserDelete()
     }
 
-    function onAfterLogin(response: Omit<CodeResponse, 'error' | 'error_description' | 'error_uri'>) {
+    async function onAfterLogin() {
         setIsLoggedIn(true)
     }
 
@@ -45,10 +50,10 @@ export default function Page() {
                 >
                     <Container maxWidth="sm">
                         <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
-                            Request deletion of personal data
+                            Deletion of personal data
                         </Typography>
                         {!isLoggedIn ? (
-                            <GoogleLogin />
+                            <GoogleLogin onAfterLogin={onAfterLogin} />
                         ) : (
                             <Box>
                                 <TextField
@@ -57,11 +62,40 @@ export default function Page() {
                                         setText(e.target.value)
                                     }}
                                 />
-                                <Button onClick={onFeedbackSend} />
+                                <Button
+                                    onClick={() => {
+                                        setShowConfirmDialog(true)
+                                    }}
+                                />
                             </Box>
                         )}
                     </Container>
                 </Box>
+                <Dialog
+                    open={showConfirmDialog}
+                    onClose={() => {
+                        setShowConfirmDialog(false)
+                    }}
+                >
+                    <DialogTitle id="alert-dialog-title">{'Are you sure you want to delete all your personal data?'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Completely deletes your current user. This action is final and cannot be undone.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => {
+                                setShowConfirmDialog(false)
+                            }}
+                        >
+                            Disagree
+                        </Button>
+                        <Button onClick={onDeletionConfirm} autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </main>
         </>
     )
