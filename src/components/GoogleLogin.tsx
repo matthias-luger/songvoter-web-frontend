@@ -9,8 +9,7 @@ interface Props {
 export default function GoogleLogin(props: Props) {
     const login = useGoogleLogin({
         onSuccess: handleGoogleSuccessResponse,
-        flow: 'auth-code',
-        redirect_uri: 'https://songvoter.party/party'
+        flow: 'auth-code'
     })
 
     async function handleGoogleSuccessResponse(response: Omit<CodeResponse, 'error' | 'error_description' | 'error_uri'>) {
@@ -18,7 +17,7 @@ export default function GoogleLogin(props: Props) {
         let token = await authController.apiAuthGoogleCodePost({
             coflnetSongVoterControllersAuthApiControllerImplAuthCode: {
                 code: response.code,
-                redirectUri: window.location.href
+                redirectUri: 'postmessage'
             }
         })
         localStorage.setItem(GOOGLE_TOKEN, token.token!)
