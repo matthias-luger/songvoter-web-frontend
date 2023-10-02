@@ -6,8 +6,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useState } from 'react'
 import GoogleLogin from '@/components/GoogleLogin'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material'
-import { CodeResponse } from '@react-oauth/google'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputLabel, TextField } from '@mui/material'
 import { getUserController } from '@/utils/ApiUtils'
 
 export default function Page() {
@@ -56,8 +55,12 @@ export default function Page() {
                             <GoogleLogin onAfterLogin={onAfterLogin} />
                         ) : (
                             <Box>
+                                <InputLabel htmlFor="reasonField">Reason (optional)</InputLabel>
                                 <TextField
+                                    id="reasonField"
                                     multiline
+                                    rows={5}
+                                    style={{ width: '100%', paddingBottom: 15 }}
                                     onChange={e => {
                                         setText(e.target.value)
                                     }}
@@ -66,7 +69,10 @@ export default function Page() {
                                     onClick={() => {
                                         setShowConfirmDialog(true)
                                     }}
-                                />
+                                    variant="contained"
+                                >
+                                    Delete personal data
+                                </Button>
                             </Box>
                         )}
                     </Container>
@@ -80,7 +86,7 @@ export default function Page() {
                     <DialogTitle id="alert-dialog-title">{'Are you sure you want to delete all your personal data?'}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Completely deletes your current user. This action is final and cannot be undone.
+                            It completely deletes your current user. This action is final and cannot be undone.
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -89,10 +95,10 @@ export default function Page() {
                                 setShowConfirmDialog(false)
                             }}
                         >
-                            Disagree
+                            Back
                         </Button>
                         <Button onClick={onDeletionConfirm} autoFocus>
-                            Agree
+                            Confirm
                         </Button>
                     </DialogActions>
                 </Dialog>
