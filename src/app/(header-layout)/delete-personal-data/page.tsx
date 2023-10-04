@@ -52,7 +52,7 @@ export default function Page() {
                 >
                     <Container maxWidth="sm">
                         <Typography component="h1" variant="h3" align="center" color="text.primary" gutterBottom>
-                            Delete your personal data
+                            Your personal data was successfully deleted!
                         </Typography>
                     </Container>
                 </Box>
