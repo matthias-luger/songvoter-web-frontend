@@ -148,7 +148,7 @@ export default function Page() {
                     }}
                 >
                     <Container maxWidth="sm">
-                        <Typography component="h1" variant="h2" align="center" color="text.primary">
+                        <Typography component="h1" variant="h3" align="center" color="text.primary">
                             Party
                         </Typography>
                         <Divider />

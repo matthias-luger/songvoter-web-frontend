@@ -27,7 +27,7 @@ export default function Home() {
                 }}
             >
                 <Container maxWidth="sm">
-                    <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
+                    <Typography component="h1" variant="h3" align="center" color="text.primary" gutterBottom>
                         SongVoter
                     </Typography>
                     <Paper style={{ padding: 20, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

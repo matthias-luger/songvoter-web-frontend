@@ -13,6 +13,7 @@ export default function Page() {
     let [isLoggedIn, setIsLoggedIn] = useState(false)
     let [showConfirmDialog, setShowConfirmDialog] = useState(false)
     let [text, setText] = useState('')
+    let [isAfterDeletion, setIsAfterDeletion] = useState(false)
 
     async function onDeletionConfirm() {
         if (text) {
@@ -29,12 +30,34 @@ export default function Page() {
                 })
             })
         }
+        setShowConfirmDialog(false)
         let userController = await getUserController()
-        userController.apiUserDelete()
+        await userController.apiUserDelete()
+        setIsAfterDeletion(true)
     }
 
     async function onAfterLogin() {
         setIsLoggedIn(true)
+    }
+
+    if (isAfterDeletion) {
+        return (
+            <main>
+                <Box
+                    sx={{
+                        bgcolor: 'background.default',
+                        pt: 3,
+                        pb: 6
+                    }}
+                >
+                    <Container maxWidth="sm">
+                        <Typography component="h1" variant="h3" align="center" color="text.primary" gutterBottom>
+                            Delete your personal data
+                        </Typography>
+                    </Container>
+                </Box>
+            </main>
+        )
     }
 
     return (
@@ -48,8 +71,8 @@ export default function Page() {
                     }}
                 >
                     <Container maxWidth="sm">
-                        <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
-                            Deletion of personal data
+                        <Typography component="h1" variant="h3" align="center" color="text.primary" gutterBottom>
+                            Delete your personal data
                         </Typography>
                         {!isLoggedIn ? (
                             <GoogleLogin onAfterLogin={onAfterLogin} />

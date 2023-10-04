@@ -45,7 +45,7 @@ export default function Page({ params }: any) {
                 >
                     <Container maxWidth="sm">
                         {!failedToJoinParty ? (
-                            <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
+                            <Typography component="h1" variant="h3" align="center" color="text.primary" gutterBottom>
                                 Joining party...
                             </Typography>
                         ) : (
