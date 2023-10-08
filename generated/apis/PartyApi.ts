@@ -37,6 +37,10 @@ import {
     CoflnetSongVoterModelsSongPlatformToJSON,
 } from '../models/index';
 
+export interface ApiPartyAddPostRequest {
+    requestBody: Array<string>;
+}
+
 export interface ApiPartyDownvoteSongIdPostRequest {
     songId: string;
 }
@@ -79,6 +83,36 @@ export interface ApiPartyUpvoteSongIdPostRequest {
  * 
  */
 export class PartyApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiPartyAddPostRaw(requestParameters: ApiPartyAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.requestBody === null || requestParameters.requestBody === undefined) {
+            throw new runtime.RequiredError('requestBody','Required parameter requestParameters.requestBody was null or undefined when calling apiPartyAddPost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
+
+        const response = await this.request({
+            path: `/api/party/add`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.requestBody,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async apiPartyAddPost(requestParameters: ApiPartyAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiPartyAddPostRaw(requestParameters, initOverrides);
+    }
 
     /**
      * votes a song down so it is play later/not at all

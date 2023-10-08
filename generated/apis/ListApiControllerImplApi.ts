@@ -42,6 +42,11 @@ export interface ApiListsListIdSongsSongIdDeleteRequest {
     songId: string;
 }
 
+export interface ApiListsListIdSongsSpotifyPostRequest {
+    listId: string;
+    requestBody?: Array<string>;
+}
+
 export interface ApiListsPostRequest {
     coflnetSongVoterModelsPlayListCreate?: CoflnetSongVoterModelsPlayListCreate;
 }
@@ -173,6 +178,39 @@ export class ListApiControllerImplApi extends runtime.BaseAPI {
      */
     async apiListsListIdSongsSongIdDelete(requestParameters: ApiListsListIdSongsSongIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsPlayList> {
         const response = await this.apiListsListIdSongsSongIdDeleteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Batch import playlist from spotify
+     */
+    async apiListsListIdSongsSpotifyPostRaw(requestParameters: ApiListsListIdSongsSpotifyPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CoflnetSongVoterModelsPlayList>> {
+        if (requestParameters.listId === null || requestParameters.listId === undefined) {
+            throw new runtime.RequiredError('listId','Required parameter requestParameters.listId was null or undefined when calling apiListsListIdSongsSpotifyPost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
+
+        const response = await this.request({
+            path: `/api/lists/{listId}/songs/spotify`.replace(`{${"listId"}}`, encodeURIComponent(String(requestParameters.listId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.requestBody,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CoflnetSongVoterModelsPlayListFromJSON(jsonValue));
+    }
+
+    /**
+     * Batch import playlist from spotify
+     */
+    async apiListsListIdSongsSpotifyPost(requestParameters: ApiListsListIdSongsSpotifyPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CoflnetSongVoterModelsPlayList> {
+        const response = await this.apiListsListIdSongsSpotifyPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
