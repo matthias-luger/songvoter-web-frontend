@@ -37,7 +37,6 @@ export default function Page() {
     async function loadParty() {
         let partyController = await getPartyController()
         let party = await partyController.apiPartyGet()
-        console.log(party)
         setParty(party)
     }
 
