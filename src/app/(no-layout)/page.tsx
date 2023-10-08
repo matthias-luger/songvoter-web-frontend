@@ -42,20 +42,25 @@ export default function Home() {
                         </div>
                     </Paper>
                     <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-                    <Card>
-                        <Image
-                            alt="Random image"
-                            src="/music.jpg"
-                            width={640}
-                            height={480}
-                            style={{
-                                maxWidth: '100%',
-                                height: '200px',
-                                objectFit: 'cover'
-                            }}
-                        />
-                        <CardContent>Get the App on the PlayStore (WIP)</CardContent>
-                    </Card>
+                    <a
+                        href="https://play.google.com/store/apps/details?id=com.coflnet.songvoter"
+                        target="_blank"
+                        style={{ textDecoration: 'none', cursor: 'pointer' }}
+                    >
+                        <Card>
+                            <Image
+                                alt="Playstore Image"
+                                src="/songvoter-banner.png"
+                                width={640}
+                                height={200}
+                                style={{
+                                    maxWidth: '100%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                            <CardContent>Get the App on the PlayStore</CardContent>
+                        </Card>
+                    </a>
                 </Container>
             </Box>
         </main>
