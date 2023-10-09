@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.coflnet.songvoter",
+            "sha256_cert_fingerprints": [
+                "0B:CF:D1:46:5D:86:25:87:A2:C7:6D:22:93:80:AA:77:59:18:67:30:76:11:23:11:47:DD:E6:6B:81:D9:C1:00"
+            ]
+        }
+    }
+]
